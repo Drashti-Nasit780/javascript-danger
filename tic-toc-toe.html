@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: black;
+      color: white;
+      font-family: Arial;
+      flex-direction: column;
+    }
+
+    .game-box {
+      position: relative;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+    }
+
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #111;
+      border: 2px solid #0ff;
+      cursor: pointer;
+    }
+
+    .cell.used {
+      pointer-events: none;
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      border: 5px solid red;
+      border-radius: 50%;
+      box-shadow: 0 0 15px red;
+    }
+
+    .cross {
+      position: relative;
+      width: 50px;
+      height: 50px;
+    }
+
+    .cross::before,
+    .cross::after {
+      content: "";
+      position: absolute;
+      left: 22px;
+      width: 5px;
+      height: 50px;
+      background: #0ff;
+      box-shadow: 0 0 15px #0ff;
+    }
+
+    .cross::before {
+      transform: rotate(45deg);
+    }
+
+    .cross::after {
+      transform: rotate(-45deg);
+    }
+
+    #line {
+      position: absolute;
+      height: 5px;
+      background: gold;
+      box-shadow: 0 0 20px gold;
+      transform-origin: left center;
+      display: none;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: gold;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="game-box">
+    <div class="board" id="board"></div>
+    <div id="line"></div>
+  </div>
+
+  <div id="message"></div>
+  <button onclick="resetGame()">Reset Game</button>
+
+  <script>
+    var boxes = ["", "", "", "", "", "", "", "", ""];
+    var turn = "O";
+    var play = true;
+
+    var boardBox = document.getElementById("board");
+    var msg = document.getElementById("message");
+    var line = document.getElementById("line");
+
+    for (var i = 0; i < 9; i++) {
+      var div = document.createElement("div");
+      div.className = "cell";
+      div.setAttribute("data-id", i);
+      div.onclick = boxClick;
+      boardBox.appendChild(div);
+    }
+
+    function boxClick() {
+      var id = this.getAttribute("data-id");
+
+      if (boxes[id] != "" || !play) { return; }
+
+      boxes[id] = turn;
+
+      var shape = document.createElement("div");
+      shape.className = turn == "O" ? "circle" : "cross";
+      this.appendChild(shape);
+      this.classList.add("used");
+
+      var winData = checkWin();
+
+      if (winData) {
+        msg.innerText = turn + " Wins 🎉";
+        play = false;
+        drawLine(winData);
+      }
+      else if (!boxes.includes("")) {
+        msg.innerText = "Draw 😐";
+        play = false;
+      }
+      else {
+        turn = turn == "O" ? "X" : "O";
+      }
+    }
+
+    function checkWin() {
+      var winSet = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+      ];
+
+      for (var i = 0; i < winSet.length; i++) {
+        var a = winSet[i][0];
+        var b = winSet[i][1];
+        var c = winSet[i][2];
+
+        if (boxes[a] != "" && boxes[a] == boxes[b] && boxes[a] == boxes[c]) {
+          return winSet[i];
+        }
+      }
+      return null;
+    }
+
+    function drawLine(pattern) {
+      var cells = document.querySelectorAll(".cell");
+
+      var first = cells[pattern[0]].getBoundingClientRect();
+      var last = cells[pattern[2]].getBoundingClientRect();
+      var boardRect = boardBox.getBoundingClientRect();
+
+      var x1 = first.left + first.width / 2 - boardRect.left;
+      var y1 = first.top + first.height / 2 - boardRect.top;
+      var x2 = last.left + last.width / 2 - boardRect.left;
+      var y2 = last.top + last.height / 2 - boardRect.top;
+
+      var length = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+      var angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+      line.style.width = length + "px";
+      line.style.left = x1 + "px";
+      line.style.top = y1 + "px";
+      line.style.transform = "rotate(" + angle + "deg)";
+      line.style.display = "block";
+    }
+
+    function resetGame() {
+      boxes = ["", "", "", "", "", "", "", "", ""];
+      turn = "O";
+      play = true;
+      msg.innerText = "";
+      boardBox.innerHTML = "";
+      line.style.display = "none";
+
+      for (var i = 0; i < 9; i++) {
+        var div = document.createElement("div");
+        div.className = "cell";
+        div.setAttribute("data-id", i);
+        div.onclick = boxClick;
+        boardBox.appendChild(div);
+      }
+    }
+  </script>
+
+</body>
+
+</html>

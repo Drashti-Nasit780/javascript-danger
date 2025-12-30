@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather App</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(120deg, #3fb984, #2aa1d6);
+        }
+
+        .card {
+            background: #f9fffd;
+            width: 320px;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            color: green;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .sub {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .city {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .time {
+            color: red;
+            font-size: 12px;
+            margin: 8px 0;
+        }
+
+        .icon {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+
+        .temp {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .desc {
+            margin: 5px 0;
+        }
+
+        .wind {
+            color: red;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="sub">Weather App</div>
+
+        <input type="text" id="cityName" placeholder="Enter city name">
+        <br>
+        <button onclick="showWeather()">Get Weather</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function showWeather() {
+            var city = document.getElementById("cityName").value;
+            var box = document.getElementById("output");
+
+            if (city == "") {
+                box.innerHTML = "Enter city name";
+            }
+            else {
+                fetch("https://wttr.in/" + city + "?format=j1")
+                    .then(function (res) {
+                        return res.json();
+                    })
+                    .then(function (data) {
+                        var temp = data.current_condition[0].temp_C;
+                        var text = data.current_condition[0].weatherDesc[0].value;
+                        var wind = data.current_condition[0].windspeedKmph;
+
+                        if (temp >= 35) {
+                            document.body.style.background = "linear-gradient(120deg,#ff512f,#dd2476)";
+                        }
+                        else if (temp >= 25) {
+                            document.body.style.background = "linear-gradient(120deg,#f7971e,#ffd200)";
+                        }
+                        else if (temp >= 15) {
+                            document.body.style.background = "linear-gradient(120deg,#56ccf2,#2f80ed)";
+                        }
+                        else {
+                            document.body.style.background = "linear-gradient(120deg,#2193b0,#6dd5ed)";
+                        }
+
+                        var now = new Date();
+                        var time = now.toDateString() + " , " + now.toLocaleTimeString();
+
+                        box.innerHTML =
+                            '<div class="city">' + city + '</div>' +
+                            '<div class="time">' + time + '</div>' +
+                            '<div class="icon">☀️</div>' +
+                            '<div class="temp">' + temp + '°C</div>' +
+                            '<div class="desc">' + text + '</div>' +
+                            '<div class="wind">Wind Speed: ' + wind + ' km/h</div>';
+                    })
+                    .catch(function () {
+                        box.innerHTML = "Weather not found";
+                    });
+            }
+        }
+    </script>
+
+</body>
+
+</html>
