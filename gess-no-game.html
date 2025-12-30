@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <title>Guess My Number!</title>
+      <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+body{
+      margin:0;
+      font-family:'Press Start 2P',cursive;
+      background:#111;
+      color:#0f0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      min-height:100vh;
+}
+.btn-top{
+      position:absolute;
+      top:20px;
+      left:20px;
+      padding:6px 12px;
+      border:2px solid #0f0;
+      background:#000;
+      color:#0f0;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:10px;
+}
+.btn-top:hover{
+      background:#0f0;
+      color:#000;
+}
+h1{
+      margin-top:40px;
+      font-size:22px;
+      text-shadow:0 0 8px #0f0;
+}
+.box{
+      margin:25px 0 10px;
+      background:#000;
+      border:3px solid #0f0;
+      width:90px;
+      height:90px;
+      font-size:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 15px #0f0;
+}
+p.range{
+      font-size:12px;
+      margin-bottom:20px;
+}
+.input-area{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+}
+.input-area input{
+      padding:10px;
+      border:2px solid #0f0;
+      background:#000;
+      color:#0f0;
+      width:160px;
+      text-align:center;
+      font-size:12px;
+      margin-bottom:10px;
+}
+.input-area button{
+      padding:10px 20px;
+      border:none;
+      background:#0f0;
+      color:#000;
+      cursor:pointer;
+      border-radius:6px;
+      font-size:10px;
+}
+.input-area button:hover{
+      background:#080;
+      color:#fff;
+}
+.bottom{
+       display:flex;
+       justify-content:space-between;
+       width:80%;
+       margin-top:25px;
+}
+.message-box,.score-board{
+       border:2px solid #0f0;
+       padding:12px;
+       background:#000;
+       border-radius:6px;
+       box-shadow:0 0 10px #0f0;
+       font-size:10px;
+       width:40%;
+}
+.hearts{
+      margin-top:10px;
+      font-size:14px;
+      letter-spacing:6px;
+}
+</style>
+</head>
+<body>
+
+      <button class="btn-top">New Game</button>
+      <h1>Guess My Number!</h1>
+      <div class="box">?</div>
+      <p class="range">Between 1 and 20</p>
+
+      <div class="input-area">
+          <input type="number" placeholder="Insert your number">
+          <button>Check!</button>
+      </div>
+
+      <div class="bottom">
+           <div class="message-box">
+               <strong>Message Box:</strong>
+               <p>> Start guessing the number!</p>
+           </div>
+          <div class="score-board">
+               <p>Max tries:</p>
+          <div class="hearts">❤️ ❤️ ❤️ ❤️ ❤️</div>
+          <p>Score: 5</p>
+          <p>HighScore: 0</p>
+          </div>
+       </div>
+
+<script>
+    var secretNumber=Math.floor(Math.random()*20)+1;
+    var score=5;
+    var highScore=0;
+
+     var input=document.querySelector('input');
+     var checkBtn=document.querySelector('.input-area button');
+     var newBtn=document.querySelector('.btn-top');
+     var msg=document.querySelector('.message-box p');
+     var box=document.querySelector('.box');
+     var hearts=document.querySelector('.hearts');
+     var scoreText=document.querySelector('.score-board p:nth-child(3)');
+     var highText=document.querySelector('.score-board p:nth-child(4)');
+
+    function showMessage(text){
+         msg.textContent='> '+text;
+    }
+    function updateHearts(){
+         hearts.textContent='❤️ '.repeat(score);
+    }
+    checkBtn.onclick=function(){
+         var guess=Number(input.value);
+              if(guess<1||guess>20){
+                  showMessage('Invalid Number');
+              }
+              else if(guess===secretNumber){
+                    showMessage('Correct Number 🎉');
+                     box.textContent=secretNumber;
+                     box.style.background='#0f0';
+                     box.style.color='#000';
+                     if(score>highScore){
+                         highScore=score;
+                         highText.textContent='HighScore: '+highScore;
+                      }
+               }
+             else{
+                      if(score>1){
+                            showMessage(guess>secretNumber?'Too High':'Too Low');
+                            score--;
+                            scoreText.textContent='Score: '+score;
+                            updateHearts();
+                       }
+                      else{
+                            showMessage('Game Over 😢');
+                            score=0;
+                            scoreText.textContent='Score: 0';
+                             updateHearts();
+                           }
+               }   
+        };
+      newBtn.onclick=function(){
+              score=5;
+              secretNumber=Math.floor(Math.random()*20)+1;
+              input.value='';
+              box.textContent='?';
+              box.style.background='#000';
+              box.style.color='#0f0';
+              scoreText.textContent='Score: 5';
+              updateHearts();
+              showMessage('Start guessing the number!');
+      };
+
+        updateHearts();
+</script>
+
+</body>
+</html>
