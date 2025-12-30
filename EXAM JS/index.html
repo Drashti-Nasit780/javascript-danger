@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<h2 style="text-align:center;">Expense Tracker Using JavaScript</h2>
+<div class="summary-box">
+    <h3>✔ Balance: <span id="balance">2000</span></h3>
+
+    <div style="display:flex; justify-content:space-between; margin-top:10px;">
+        <div>
+            <h4>Total Income</h4>
+            <p id="totalIncome" class="green">25000</p>
+        </div>
+
+        <div>
+            <h4>Total Expense</h4>
+            <p id="totalExpense" class="red">23000</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <table id="dataTable">
+        <tr>
+            <th>S.No.</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Delete</th>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>income</td>
+            <td>25000</td>
+            <td>✔</td>
+            <td><span onclick="deleteRow(event)">❌</span></td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>rent</td>
+            <td>18000</td>
+            <td>X</td>
+            <td><span onclick="deleteRow(event)">❌</span></td>
+        </tr>
+
+        <tr>
+            <td>3</td>
+            <td>food</td>
+            <td>5000</td>
+            <td>X</td>
+            <td><span onclick="deleteRow(event)">❌</span></td>
+        </tr>
+    </table>
+
+    <div class="form-box">
+        <h3>Add New</h3>
+
+        <label>Entry Type:</label>
+        <select id="type">
+            <option value="X">Expense</option>
+            <option value="✔">Income</option>
+        </select>
+
+        <label>Name:</label>
+        <input id="name" placeholder="name"/>
+
+        <label>Amount:</label>
+        <input id="amount" type="number" value="0" />
+
+        <button onclick="addData()">Add Entry</button>
+    </div>
+</div>
+
+
+<script>
+let count = 4;
+let totalIncome = 25000;
+let totalExpense = 23000;
+
+updateBalance();
+
+function addData() {
+    let name = document.getElementById("name").value;
+    let amount = Number(document.getElementById("amount").value);
+    let type = document.getElementById("type").value;
+
+    if (name === "" || amount === "") return;
+
+    let table = document.getElementById("dataTable");
+
+    let row = `<tr><td>${count++}</td><td>${name}</td> <td>${amount}</td><td>${type}</td><td><span onclick="deleteRow(event)">❌</span></td></tr>`;
+
+    table.innerHTML += row;
+
+    if (type === "✔") totalIncome += amount;
+    else totalExpense += amount;
+
+    updateBalance();
+    document.getElementById("name").value = "";
+    document.getElementById("amount").value = "";
+}
+
+function deleteRow(event) {
+    let row = event.target.closest("tr");
+
+    let amount = Number(row.cells[2].innerText);
+    let type = row.cells[3].innerText;
+
+    if (type === "✔") totalIncome -= amount;
+    else totalExpense -= amount;
+
+    row.remove();
+    updateBalance();
+}
+
+function updateBalance() {
+    let balance = totalIncome - totalExpense;
+    document.getElementById("totalIncome").innerHTML = totalIncome;
+    document.getElementById("totalExpense").innerHTML = totalExpense;
+    document.getElementById("balance").innerHTML = balance;
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
