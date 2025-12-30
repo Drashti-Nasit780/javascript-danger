@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tip Calculator</title>
+
+<style>
+body {
+    background: linear-gradient(135deg, #1d2671, #c33764);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    gap: 30px;
+}
+
+.calculator,
+.output-box {
+    background: linear-gradient(180deg, #ffffff, #f4f6ff);
+    width: 320px;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    position: relative;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 22px;
+    font-weight: 600;
+}
+
+.input-group,
+.result-field {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+input[type="number"]:focus {
+    border-color: #6a63d8;
+    box-shadow: 0 0 6px rgba(106,99,216,0.4);
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #6a63d8, #8f5cff);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(106,99,216,0.5);
+}
+
+.output-box input {
+    background: #ffffff;
+    font-weight: 600;
+    color: #333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="calculator">
+        <h1>💰 Tip Calculator</h1>
+
+        <div class="input-group">
+            <label>Bill Amount</label>
+            <input type="number" id="billAmount">
+        </div>
+
+        <div class="input-group">
+            <label>Tip Percentage (%)</label>
+            <input type="number" id="tipPercent">
+        </div>
+
+        <div class="input-group">
+            <label>Number of People</label>
+            <input type="number" id="peopleCount">
+        </div>
+
+        <button onclick="calculateTipDetails()">Calculate</button>
+    </div>
+
+    <div class="output-box">
+        <h2>📊 Result</h2>
+
+        <div class="result-field">
+            <label>Tip Per Person</label>
+            <input type="number" id="tipPerPerson">
+        </div>
+
+        <div class="result-field">
+            <label>Total Per Person</label>
+            <input type="number" id="totalPerPerson">
+        </div>
+
+        <div class="result-field">
+            <label>Total Bill</label>
+            <input type="number" id="finalBill">
+        </div>
+    </div>
+
+</div>
+
+<script>
+function calculateTipDetails() {
+
+    var billAmount = Number(document.getElementById("billAmount").value);
+    var tipPercent = Number(document.getElementById("tipPercent").value);
+    var peopleCount = Number(document.getElementById("peopleCount").value);
+
+    if (billAmount <= 0 || tipPercent < 0 || peopleCount <= 0) {
+        alert("Please enter valid values");
+        return;
+    }
+
+    var totalTip = (billAmount * tipPercent) / 100;
+    var finalBill = billAmount + totalTip;
+
+    var totalPerPerson = finalBill / peopleCount;
+    var tipPerPerson = totalTip / peopleCount;
+
+    document.getElementById("finalBill").value = finalBill.toFixed(2);
+    document.getElementById("totalPerPerson").value = totalPerPerson.toFixed(2);
+    document.getElementById("tipPerPerson").value = tipPerPerson.toFixed(2);
+}
+</script>
+
+</body>
+</html>
