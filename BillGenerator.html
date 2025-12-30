@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Simple Bill Generator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #e3f2fd, #fce4ec);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 500px;
+}
+
+.card {
+    background: linear-gradient(135deg, #ffffff, #f1f8e9);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    border-left: 6px solid #4CAF50;
+}
+
+#billCard {
+    background: linear-gradient(135deg, #ffffff, #e3f2fd);
+    border-left: 6px solid #2196F3;
+}
+
+h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #2c3e50;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 8px;
+}
+
+td:first-child {
+    width: 40%;
+    font-weight: bold;
+    color: #333;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    background-color: #ffffff;
+}
+
+textarea {
+    resize: none;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #43a047, #1b5e20);
+}
+
+#billCard {
+    display: none;
+}
+
+.total {
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h3>Customer Details</h3>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" id="name"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea id="address"></textarea></td>
+            </tr>
+            <tr>
+                <td>Unit</td>
+                <td><input type="number" id="unit"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button onclick="generate()">Generate Bill</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card" id="billCard">
+        <h3>Electricity Bill</h3>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" id="rname"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea id="raddress"></textarea></td>
+            </tr>
+            <tr>
+                <td>Unit</td>
+                <td><input type="number" id="runit"></td>
+            </tr>
+            <tr>
+                <td>Rate</td>
+                <td><input type="text" value="1 Unit = ₹4"></td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td><input type="text" id="amount"></td>
+            </tr>
+            <tr>
+                <td>GST (5%)</td>
+                <td><input type="text" id="gst"></td>
+            </tr>
+            <tr class="total">
+                <td>Total Pay</td>
+                <td><input type="text" id="total"></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script>
+function generate() {
+
+    var name = document.getElementById("name").value;
+    var address = document.getElementById("address").value;
+    var unit = document.getElementById("unit").value;
+
+    if (name == "" || address == "" || unit == "" || unit <= 0) {
+        alert("Please fill all details correctly");
+        return;
+    }
+
+    var amount = unit * 4;
+    var gst = amount * 5 / 100;
+    var total = amount + gst;
+
+    document.getElementById("rname").value = name;
+    document.getElementById("raddress").value = address;
+    document.getElementById("runit").value = unit;
+    document.getElementById("amount").value = amount;
+    document.getElementById("gst").value = gst;
+    document.getElementById("total").value = total;
+
+    document.getElementById("billCard").style.display = "block";
+}
+</script>
+
+</body>
+</html>
