@@ -117,39 +117,40 @@ button:hover {
         </table>
     </div>
 
-    <div class="card" id="billCard">
-        <h3>Electricity Bill</h3>
-        <table>
-            <tr>
-                <td>Name</td>
-                <td><input type="text" id="rname"></td>
-            </tr>
-            <tr>
-                <td>Address</td>
-                <td><textarea id="raddress"></textarea></td>
-            </tr>
-            <tr>
-                <td>Unit</td>
-                <td><input type="number" id="runit"></td>
-            </tr>
-            <tr>
-                <td>Rate</td>
-                <td><input type="text" value="1 Unit = ₹4"></td>
-            </tr>
-            <tr>
-                <td>Amount</td>
-                <td><input type="text" id="amount"></td>
-            </tr>
-            <tr>
-                <td>GST (5%)</td>
-                <td><input type="text" id="gst"></td>
-            </tr>
-            <tr class="total">
-                <td>Total Pay</td>
-                <td><input type="text" id="total"></td>
-            </tr>
-        </table>
-    </div>
+   <div class="card" id="billCard">
+    <h3>Electricity Bill</h3>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" id="rname" readonly></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><textarea id="raddress" readonly></textarea></td>
+        </tr>
+        <tr>
+            <td>Unit</td>
+            <td><input type="number" id="runit" readonly></td>
+        </tr>
+        <tr>
+            <td>Rate</td>
+            <td><input type="text" value="1 Unit = ₹4" readonly></td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td><input type="text" id="amount" readonly></td>
+        </tr>
+        <tr>
+            <td>GST (5%)</td>
+            <td><input type="text" id="gst" readonly></td>
+        </tr>
+        <tr class="total">
+            <td>Total Pay</td>
+            <td><input type="text" id="total" readonly></td>
+        </tr>
+    </table>
+</div>
+
 
 </div>
 
@@ -182,3 +183,4 @@ function generate() {
 
 </body>
 </html>
+
