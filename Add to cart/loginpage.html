@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#e0f7fa,#ffffff);
+  font-family:Arial;
+}
+.login-box{
+  background:#fff;
+  padding:30px;
+  border-radius:15px;
+  width:300px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+}
+input,button{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  background:linear-gradient(135deg,#89dfea,#51c8f0);
+  color:white;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+button:hover{
+  opacity:0.9;
+}
+</style>
+</head>
+<body>
+
+<form class="login-box" onsubmit="loginUser(event)">
+  <h3>Login</h3>
+  <input id="username" required placeholder="Username">
+  <input id="password" required type="password" placeholder="Password">
+  <button>Login</button>
+</form>
+
+<script>
+function loginUser(e){
+  e.preventDefault();
+  
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+
+  if(!username.includes("@gmail.com")){
+    alert("Error: Please enter a valid Gmail address!");
+    return;
+  }
+
+  localStorage.setItem("auth","yes");
+  window.location="Product.html";
+}
+</script>
+
+</body>
+</html>

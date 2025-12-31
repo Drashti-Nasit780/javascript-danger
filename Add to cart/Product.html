@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Products</title>
+
+<style>
+body{
+  margin:0;
+  padding:20px;
+  font-family:Arial;
+  background:linear-gradient(135deg,#e0f7fa,#ffffff);
+}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#333;
+  margin-bottom:25px;
+}
+
+.cart-icon{
+  position:relative;
+  font-size:26px;
+  color:#333;
+  text-decoration:none;
+}
+
+#cartCount{
+  position:absolute;
+  top:-8px;
+  right:-10px;
+  background:#4caf50;
+  color:white;
+  font-size:12px;
+  padding:2px 7px;
+  border-radius:50%;
+}
+
+/* GRID */
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+/* CARD */
+.card{
+  background:linear-gradient(180deg,#ffffff,#f0f0f5);
+  border-radius:28px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  transition:0.35s;
+  position:relative;
+  overflow:hidden;
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.card img{
+  height:170px;
+  object-fit:contain;
+  margin-bottom:15px;
+}
+
+.card h4{
+  font-size:15px;
+  min-height:42px;
+  color:#333;
+}
+
+.price{
+  font-size:18px;
+  font-weight:800;
+  color:#00796b;
+  margin:12px 0;
+}
+
+.add-btn{
+  background:linear-gradient(135deg,#4caf50,#81c784);
+  color:white;
+  border:none;
+  padding:13px;
+  width:100%;
+  border-radius:35px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:700;
+  transition:0.25s;
+}
+
+.add-btn:hover{
+  transform:scale(1.05);
+}
+
+.added{
+  background:linear-gradient(135deg,#388e3c,#66bb6a)!important;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("auth")!=="yes"){
+  window.location="loginpage.html";
+}
+</script>
+
+<div class="topbar">
+  <h2>🛍 Products</h2>
+  <a href="cart.html" class="cart-icon">
+    🛒 <span id="cartCount">0</span>
+  </a>
+</div>
+
+<div class="products" id="productBox"></div>
+
+<script>
+let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+
+fetch("https://fakestoreapi.com/products")
+.then(res=>res.json())
+.then(data=>{
+  productBox.innerHTML = data.map(p=>`
+    <div class="card">
+      <img src="${p.image}">
+      <h4>${p.title}</h4>
+      <div class="price">₹ ${p.price}</div>
+      <button class="add-btn"
+      onclick="addToCart(${p.id},'${p.image}','${encodeURIComponent(p.title)}',${p.price},this)">
+      🛒 Add to Cart
+      </button>
+    </div>
+  `).join("");
+});
+
+function addToCart(id,img,name,price,btn){
+  name = decodeURIComponent(name);
+
+  let found = cartData.find(x=>x.id===id);
+  if(found){ found.qty++; }
+  else{ cartData.push({id,img,name,price,qty:1}); }
+
+  localStorage.setItem("cartData",JSON.stringify(cartData));
+  updateCartCount();
+
+  btn.innerText="✔ Added";
+  btn.classList.add("added");
+  setTimeout(()=>{
+    btn.innerText="🛒 Add to Cart";
+    btn.classList.remove("added");
+  },1200);
+}
+
+function updateCartCount(){
+  let total=0;
+  cartData.forEach(x=>total+=x.qty);
+  cartCount.innerText=total;
+}
+
+updateCartCount();
+</script>
+
+</body>
+</html>
