@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card" id="quizCard">
+      <div class="meta">
+        <div class="progress">1 of 5</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">Time: <strong id="timer">00:30</strong></div>
+        </div>
+      </div>
+      <h2 id="questionTitle">Loading...</h2>
+      <p class="question" id="questionSubtitle">Choose the best option.</p>
+      <div class="choices" id="choices"></div>
+      <div class="footer">
+        <button class="btn" id="prevBtn" style="background:#6b7280">Previous</button>
+        <button class="btn" id="nextBtn">Next</button>
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+    var box = document.getElementById("choices");
+    var next = document.getElementById("nextBtn");
+    var prev = document.getElementById("prevBtn");
+    var bar = document.getElementById("progressFill");
+    var text = document.querySelector(".progress");
+    var timeText = document.getElementById("timer");
+
+    var qNo = 0;
+    var marks = 0;
+    var answer = "";
+    var seconds = 30;
+    var clock;
+
+    var saved = [];
+
+    var questions = [
+      { q: "Which is the only continent in the world without a desert?", o: ["North America", "Asia", "Europe", "Africa"], a: "Europe" },
+      { q: "Which planet is known as the Red Planet?", o: ["Earth", "Mars", "Jupiter", "Venus"], a: "Mars" },
+      { q: "How many days are there in a leap year?", o: ["364", "365", "366", "367"], a: "366" },
+      { q: "Which gas do plants absorb?", o: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], a: "Carbon Dioxide" },
+      { q: "Which is the largest ocean?", o: ["Indian", "Atlantic", "Pacific", "Arctic"], a: "Pacific" }
+    ];
+
+    function showQuestion() {
+      clearInterval(clock);
+      startTime();
+
+      var data = questions[qNo];
+      document.getElementById("questionTitle").innerText = data.q;
+      box.innerHTML = "";
+      answer = saved[qNo] || "";
+
+      data.o.forEach(function (opt) {
+        var lab = document.createElement("label");
+        lab.className = "choice";
+        lab.innerHTML = `<input type="radio" name="opt"> <span class="label">${opt}</span>`;
+
+        if (saved[qNo] === opt) {
+          lab.classList.add("selected");
+        }
+
+        lab.onclick = function () {
+          answer = opt;
+          saved[qNo] = opt;
+
+          document.querySelectorAll(".choice").forEach(x => x.classList.remove("selected"));
+          lab.classList.add("selected");
+        };
+
+        box.appendChild(lab);
+      });
+
+      bar.style.width = ((qNo + 1) / questions.length) * 100 + "%";
+      text.innerText = (qNo + 1) + " of " + questions.length;
+    }
+
+    function startTime() {
+      seconds = 30;
+      timeText.innerText = "00:30";
+
+      clock = setInterval(function () {
+        seconds--;
+        timeText.innerText = "00:" + (seconds < 10 ? "0" + seconds : seconds);
+
+        if (seconds == 0) {
+          clearInterval(clock);
+          goNext();
+        }
+      }, 1000);
+    }
+
+    function goNext() {
+      var right = questions[qNo].a;
+
+      if (saved[qNo] === right && !questions[qNo].done) {
+        marks++;
+        questions[qNo].done = true;
+      }
+
+      qNo++;
+      if (qNo < questions.length) showQuestion();
+      else finishQuiz();
+    }
+
+    function finishQuiz() {
+      document.getElementById("quizCard").innerHTML = `
+      <h2 style="text-align:center;">Quiz Finished 🎉</h2>
+      <h1 style="text-align:center;">${marks} / ${questions.length}</h1>
+      <div style="text-align:center;">
+        <button class="btn" onclick="location.reload()">Restart</button>
+      </div>
+    `;
+    }
+
+    next.onclick = goNext;
+
+    prev.onclick = function () {
+      if (qNo > 0) {
+        qNo--;
+        showQuestion();
+      }
+    };
+
+    showQuestion();
+  </script>
+
+
+</body>
+
+</html>
