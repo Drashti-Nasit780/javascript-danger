@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Grade Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf0ff;
+            padding: 20px;
+        }
+        .input-box {
+            max-width: 400px;
+            margin: auto;
+            background: rgb(231, 242, 255);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-box h2 {
+            text-align: center;
+            color: #2c4b6c;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #3b73b9;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2e5d9f;
+        }
+
+        /* OUTPUT UI */
+        .output {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .table-box {
+            max-width: 1000px;
+            margin: auto;
+            background: #f9fbff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #3b73b9;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f2f6ff;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+
+        .summary {
+            margin-top: 15px;
+            max-width: 1000px;
+            margin: auto;
+            background: #3b73b9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .summary tr th {
+            color: white;
+        }
+
+        .summary tr td {
+            color: black;
+        }
+
+        .summary th {
+            background: #2e5d9f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="input-box">
+        <h2>Enter Student Data</h2>
+        <input id="sname" placeholder="Name">
+        <input id="sclass" placeholder="Class">
+        <input id="guj" type="number" placeholder="Gujarati">
+        <input id="hin" type="number" placeholder="Hindi">
+        <input id="eng" type="number" placeholder="English">
+        <input id="sci" type="number" placeholder="Science">
+        <input id="math" type="number" placeholder="Maths">
+        <input id="ss" type="number" placeholder="S.S">
+        <input id="san" type="number" placeholder="Sanskrit">
+        <button onclick="calculator.showResult()">Show Result</button>
+    </div>
+    <div class="output" id="output">
+
+        <h1 style="text-align:center;color:#2c4b6c">Grade Calculator</h1>
+        <div class="table-box" style="margin-bottom:20px;">
+            <table style="background-color: #3b73b9; color: white;">
+                <tr>
+                    <th>NAME</th>
+                    <th>CLASS</th>
+                </tr>
+                <tr style="color: black;">
+                    <td id="outName"></td>
+                    <td id="outClass"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SUBJECT</th>
+                        <th>MARKS</th>
+                        <th>GRADE</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody"></tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <table>
+                <tr>
+                    <th>TOTAL</th>
+                    <th>PERCENTAGE</th>
+                    <th>GRADE</th>
+                    <th>RESULT</th>
+                </tr>
+                <tr>
+                    <td id="total"></td>
+                    <td id="per"></td>
+                    <td id="grade"></td>
+                    <td id="status"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        class GradeCalculator {
+
+            constructor() {
+                this.subjects = [
+                    ["Gujarati", "guj"],
+                    ["Hindi", "hin"],
+                    ["English", "eng"],
+                    ["Science", "sci"],
+                    ["Maths", "math"],
+                    ["S.S", "ss"],
+                    ["Sanskrit", "san"]
+                ];
+                this.total = 0;
+            }
+
+            getGrade(marks) {
+                if (marks >= 90) return "A+";
+                if (marks >= 80) return "A";
+                if (marks >= 70) return "B+";
+                if (marks >= 60) return "B";
+                if (marks >= 50) return "C";
+                if (marks >= 35) return "D";
+                return "F";
+            }
+
+            showResult() {
+                outName.innerText = sname.value;
+                outClass.innerText = sclass.value;
+
+                let tbody = "";
+                this.total = 0;
+
+                for (let sub of this.subjects) {
+                    let subjectName = sub[0];
+                    let marks = Number(document.getElementById(sub[1]).value);
+                    let grade = marks < 35 ? "F" : this.getGrade(marks);
+
+                    tbody += `
+                <tr class="${grade === "F" ? "fail" : ""}">
+                    <td>${subjectName}</td>
+                    <td>${marks}</td>
+                    <td>${grade}</td>
+                </tr>
+            `;
+
+                    this.total += marks;
+                }
+
+                let percentage = (this.total / 700) * 100;
+                let finalGrade = this.getGrade(percentage);
+
+                resultBody.innerHTML = tbody;
+                total.innerText = this.total;
+                per.innerText = percentage.toFixed(2) + "%";
+                grade.innerText = finalGrade;
+                status.innerText = finalGrade === "F" ? "Fail" : "Pass";
+
+                output.style.display = "block";
+            }
+        }
+
+        const calculator = new GradeCalculator();
+    </script>
+
+
+</body>
+
+</html>
