@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Card Slider</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#dcdcff;
+}
+
+.slider-wrapper{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:80px;
+}
+
+.view{
+  width:300px;
+  overflow:hidden;
+}
+
+.slider{
+  display:flex;
+  gap:20px;
+  transition:0.5s;
+}
+
+.card{
+  min-width:280px;
+  background:white;
+  border-radius:18px;
+  padding:15px;
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.card img{
+  width:100%;
+  border-radius:14px;
+}
+
+.card h3{
+  margin:15px 0 5px;
+}
+
+.card p{
+  font-size:14px;
+  color:#555;
+}
+
+.card button{
+  background:#6c63ff;
+  color:white;
+  border:none;
+  padding:8px 18px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.arrow{
+  background:none;
+  border:none;
+  font-size:40px;
+  cursor:pointer;
+  color:#6c63ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="slider-wrapper">
+  <button class="arrow" onclick="prev()">❮</button>
+
+  <div class="view">
+    <div class="slider" id="slider">
+      <div class="card">
+        <img src="https://i.pinimg.com/736x/9a/06/b6/9a06b6beacf23ca2e735457234997354.jpg">
+        <h3>Modern UI Trends</h3>
+        <p>Latest UI design ideas</p>
+        <button>Read More</button>
+      </div>
+
+      <div class="card">
+        <img src="https://i.pinimg.com/1200x/99/d2/63/99d26377b7bb3bcd65110d493b7050cf.jpg">
+        <h3>Frontend Frameworks</h3>
+        <p>Best frontend tools</p>
+        <button>Read More</button>
+      </div>
+
+      <div class="card">
+        <img src="https://i.pinimg.com/1200x/d6/3a/8d/d63a8de9563d82a65e3e2f6c04a4fe44.jpg">
+        <h3>Micro Animations</h3>
+        <p>Improve user experience</p>
+        <button>Read More</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="arrow" onclick="next()">❯</button>
+</div>
+
+<script>
+var slider = document.getElementById("slider");
+var cards = document.querySelectorAll(".card");
+var i = 0;
+var step = cards[0].offsetWidth + 20;
+
+function show(){
+  slider.style.transform = "translateX(" + (-step * i) + "px)";
+}
+
+function next(){
+  i++;
+  if(i >= cards.length){
+    i = 0;
+  }
+  show();
+}
+
+function prev(){
+  i--;
+  if(i < 0){
+    i = cards.length - 1;
+  }
+  show();
+}
+
+show();
+</script>
+
+</body>
+</html>
